@@ -1,0 +1,58 @@
+---
+# Automated daily commit workflow - runs Monday through Friday
+
+name: Daily Activity Commits
+
+on:
+  # Scheduled trigger - runs Monday to Friday at 10:00 AM UTC
+  schedule:
+    # ┌───────────── minute (0 - 59)
+    # │ ┌───────────── hour (0 - 23)
+    # │ │ ┌───────────── day of the month (1 - 31)
+    # │ │ │ ┌───────────── month (1 - 12)
+    # │ │ │ │ ┌───────────── day of the week (0 - 6) (Sunday to Saturday)
+    # │ │ │ │ │
+    # │ │ │ │ │
+    - cron: '0 10 * * 1-5'  # 10:00 UTC, Monday(1) through Friday(5)
+
+  # Allow manual trigger for testing
+  workflow_dispatch:
+
+# Required permissions for pushing commits
+permissions:
+  contents: write
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0  # Full history for proper git operations
+
+      # Step 2: Set up Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Step 3: Configure Git identity
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      # Step 4: Run the auto-commit script
+      - name: Run Auto-Commit Script
+        run: python auto_commit.py
+
+      # Step 5: Push changes to the repository
+      - name: Push Changes
+        run: |
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
