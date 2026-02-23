@@ -43,8 +43,8 @@ jobs:
       # Step 3: Configure Git identity
       - name: Configure Git
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "EdwinP503"
+          git config --global user.email "EdwinP503@users.noreply.github.com"
 
       # Step 4: Run the auto-commit script
       - name: Run Auto-Commit Script
