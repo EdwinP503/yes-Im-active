@@ -148,8 +148,8 @@ def main():
     # Configuration
     log_file = Path("activity_log.md")
     
-    # Determine number of commits (1-3)
-    num_commits = random.randint(1, 3)
+    # Determine number of commits (3-6)
+    num_commits = random.randint(3, 6)
     print(f"📊 Generating {num_commits} commit(s) for today...")
     print()
     
